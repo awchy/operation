@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ziroom.zo.repository.mybatis.repository.mybatis.mapper.HerosMapper">
+	<resultMap type="heros" id="herosResultMap">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="hpMax" column="hp_max"/>
+		<result property="hpGrowth" column="hp_growth"/>
+		<result property="hpStart" column="hp_start"/>
+		<result property="mpMax" column="mp_max"/>
+		<result property="mpGrowth" column="mp_growth"/>
+		<result property="mpStart" column="mp_start"/>
+		<result property="attackMax" column="attack_max"/>
+		<result property="attackGrowth" column="attack_growth"/>
+		<result property="attackStart" column="attack_start"/>
+		<result property="defenseMax" column="defense_max"/>
+		<result property="defenseGrowth" column="defense_growth"/>
+		<result property="defenseStart" column="defense_start"/>
+		<result property="hp5sMax" column="hp_5s_max"/>
+		<result property="hp5sGrowth" column="hp_5s_growth"/>
+		<result property="hp5sStart" column="hp_5s_start"/>
+		<result property="mp5sMax" column="mp_5s_max"/>
+		<result property="mp5sGrowth" column="mp_5s_growth"/>
+		<result property="mp5sStart" column="mp_5s_start"/>
+		<result property="attackSpeedMax" column="attack_speed_max"/>
+		<result property="attackRange" column="attack_range"/>
+		<result property="roleMain" column="role_main"/>
+		<result property="roleAssist" column="role_assist"/>
+		<result property="birthdate" column="birthdate"/>
+	</resultMap>
+	
+	<sql id="table_columns">
+		id,
+		name,
+		hp_max,
+		hp_growth,
+		hp_start,
+		mp_max,
+		mp_growth,
+		mp_start,
+		attack_max,
+		attack_growth,
+		attack_start,
+		defense_max,
+		defense_growth,
+		defense_start,
+		hp_5s_max,
+		hp_5s_growth,
+		hp_5s_start,
+		mp_5s_max,
+		mp_5s_growth,
+		mp_5s_start,
+		attack_speed_max,
+		attack_range,
+		role_main,
+		role_assist,
+		birthdate
+    </sql>
+	<sql id="entity_properties">
+		#{id},
+		#{name},
+		#{hpMax},
+		#{hpGrowth},
+		#{hpStart},
+		#{mpMax},
+		#{mpGrowth},
+		#{mpStart},
+		#{attackMax},
+		#{attackGrowth},
+		#{attackStart},
+		#{defenseMax},
+		#{defenseGrowth},
+		#{defenseStart},
+		#{hp5sMax},
+		#{hp5sGrowth},
+		#{hp5sStart},
+		#{mp5sMax},
+		#{mp5sGrowth},
+		#{mp5sStart},
+		#{attackSpeedMax},
+		#{attackRange},
+		#{roleMain},
+		#{roleAssist},
+		#{birthdate}
+	</sql>
+
+    <!-- 使用like用法：columnName like concat('%',#columnName#,'%') -->
+    <sql id="page_where">
+        <trim prefix="where" prefixOverrides="and | or ">
+            <if test="name != null and name != ''">and name = #{name}</if>
+            <if test="hpMax != null">and hp_max = #{hpMax}</if>
+            <if test="hpGrowth != null">and hp_growth = #{hpGrowth}</if>
+            <if test="hpStart != null">and hp_start = #{hpStart}</if>
+            <if test="mpMax != null">and mp_max = #{mpMax}</if>
+            <if test="mpGrowth != null">and mp_growth = #{mpGrowth}</if>
+            <if test="mpStart != null">and mp_start = #{mpStart}</if>
+            <if test="attackMax != null">and attack_max = #{attackMax}</if>
+            <if test="attackGrowth != null">and attack_growth = #{attackGrowth}</if>
+            <if test="attackStart != null">and attack_start = #{attackStart}</if>
+            <if test="defenseMax != null">and defense_max = #{defenseMax}</if>
+            <if test="defenseGrowth != null">and defense_growth = #{defenseGrowth}</if>
+            <if test="defenseStart != null">and defense_start = #{defenseStart}</if>
+            <if test="hp5sMax != null">and hp_5s_max = #{hp5sMax}</if>
+            <if test="hp5sGrowth != null">and hp_5s_growth = #{hp5sGrowth}</if>
+            <if test="hp5sStart != null">and hp_5s_start = #{hp5sStart}</if>
+            <if test="mp5sMax != null">and mp_5s_max = #{mp5sMax}</if>
+            <if test="mp5sGrowth != null">and mp_5s_growth = #{mp5sGrowth}</if>
+            <if test="mp5sStart != null">and mp_5s_start = #{mp5sStart}</if>
+            <if test="attackSpeedMax != null">and attack_speed_max = #{attackSpeedMax}</if>
+            <if test="attackRange != null and attackRange != ''">and attack_range = #{attackRange}</if>
+            <if test="roleMain != null and roleMain != ''">and role_main = #{roleMain}</if>
+            <if test="roleAssist != null and roleAssist != ''">and role_assist = #{roleAssist}</if>
+            <if test="birthdate != null">and birthdate = #{birthdate}</if>
+        </trim>
+    </sql>
+
+
+	<!-- 适用于主键自增类型 -->
+	<insert id="insert" parameterType="heros" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+		insert into heros( <include refid="table_columns" /> ) 
+		values ( <include refid="entity_properties" /> )
+	</insert>
+
+    <insert id="insertSelective" parameterType="heros">
+        <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into heros
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null and name != ''">name,</if>
+            <if test="hpMax != null">hp_max,</if>
+            <if test="hpGrowth != null">hp_growth,</if>
+            <if test="hpStart != null">hp_start,</if>
+            <if test="mpMax != null">mp_max,</if>
+            <if test="mpGrowth != null">mp_growth,</if>
+            <if test="mpStart != null">mp_start,</if>
+            <if test="attackMax != null">attack_max,</if>
+            <if test="attackGrowth != null">attack_growth,</if>
+            <if test="attackStart != null">attack_start,</if>
+            <if test="defenseMax != null">defense_max,</if>
+            <if test="defenseGrowth != null">defense_growth,</if>
+            <if test="defenseStart != null">defense_start,</if>
+            <if test="hp5sMax != null">hp_5s_max,</if>
+            <if test="hp5sGrowth != null">hp_5s_growth,</if>
+            <if test="hp5sStart != null">hp_5s_start,</if>
+            <if test="mp5sMax != null">mp_5s_max,</if>
+            <if test="mp5sGrowth != null">mp_5s_growth,</if>
+            <if test="mp5sStart != null">mp_5s_start,</if>
+            <if test="attackSpeedMax != null">attack_speed_max,</if>
+            <if test="attackRange != null and attackRange != ''">attack_range,</if>
+            <if test="roleMain != null and roleMain != ''">role_main,</if>
+            <if test="roleAssist != null and roleAssist != ''">role_assist,</if>
+            <if test="birthdate != null">birthdate,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="hpMax != null">#{hpMax},</if>
+            <if test="hpGrowth != null">#{hpGrowth},</if>
+            <if test="hpStart != null">#{hpStart},</if>
+            <if test="mpMax != null">#{mpMax},</if>
+            <if test="mpGrowth != null">#{mpGrowth},</if>
+            <if test="mpStart != null">#{mpStart},</if>
+            <if test="attackMax != null">#{attackMax},</if>
+            <if test="attackGrowth != null">#{attackGrowth},</if>
+            <if test="attackStart != null">#{attackStart},</if>
+            <if test="defenseMax != null">#{defenseMax},</if>
+            <if test="defenseGrowth != null">#{defenseGrowth},</if>
+            <if test="defenseStart != null">#{defenseStart},</if>
+            <if test="hp5sMax != null">#{hp5sMax},</if>
+            <if test="hp5sGrowth != null">#{hp5sGrowth},</if>
+            <if test="hp5sStart != null">#{hp5sStart},</if>
+            <if test="mp5sMax != null">#{mp5sMax},</if>
+            <if test="mp5sGrowth != null">#{mp5sGrowth},</if>
+            <if test="mp5sStart != null">#{mp5sStart},</if>
+            <if test="attackSpeedMax != null">#{attackSpeedMax},</if>
+            <if test="attackRange != null and attackRange != ''">#{attackRange},</if>
+            <if test="roleMain != null and roleMain != ''">#{roleMain},</if>
+            <if test="roleAssist != null and roleAssist != ''">#{roleAssist},</if>
+            <if test="birthdate != null">#{birthdate},</if>
+        </trim>
+	</insert>
+
+
+	<delete id="delete" parameterType="heros">
+		delete from heros
+        <include refid="page_where" />
+	</delete>
+
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from heros
+		where id = #{id}
+	</delete>
+
+
+	<update id="updateByPrimaryKey" parameterType="heros">
+		update heros 
+		<trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="hpMax != null">hp_max = #{hpMax},</if>
+            <if test="hpGrowth != null">hp_growth = #{hpGrowth},</if>
+            <if test="hpStart != null">hp_start = #{hpStart},</if>
+            <if test="mpMax != null">mp_max = #{mpMax},</if>
+            <if test="mpGrowth != null">mp_growth = #{mpGrowth},</if>
+            <if test="mpStart != null">mp_start = #{mpStart},</if>
+            <if test="attackMax != null">attack_max = #{attackMax},</if>
+            <if test="attackGrowth != null">attack_growth = #{attackGrowth},</if>
+            <if test="attackStart != null">attack_start = #{attackStart},</if>
+            <if test="defenseMax != null">defense_max = #{defenseMax},</if>
+            <if test="defenseGrowth != null">defense_growth = #{defenseGrowth},</if>
+            <if test="defenseStart != null">defense_start = #{defenseStart},</if>
+            <if test="hp5sMax != null">hp_5s_max = #{hp5sMax},</if>
+            <if test="hp5sGrowth != null">hp_5s_growth = #{hp5sGrowth},</if>
+            <if test="hp5sStart != null">hp_5s_start = #{hp5sStart},</if>
+            <if test="mp5sMax != null">mp_5s_max = #{mp5sMax},</if>
+            <if test="mp5sGrowth != null">mp_5s_growth = #{mp5sGrowth},</if>
+            <if test="mp5sStart != null">mp_5s_start = #{mp5sStart},</if>
+            <if test="attackSpeedMax != null">attack_speed_max = #{attackSpeedMax},</if>
+            <if test="attackRange != null and attackRange != ''">attack_range = #{attackRange},</if>
+            <if test="roleMain != null and roleMain != ''">role_main = #{roleMain},</if>
+            <if test="roleAssist != null and roleAssist != ''">role_assist = #{roleAssist},</if>
+            <if test="birthdate != null">birthdate = #{birthdate},</if>
+		</trim>
+		<where>id = #{id}</where>
+	</update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="heros">
+        update heros
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="hpMax != null">hp_max = #{hpMax},</if>
+            <if test="hpGrowth != null">hp_growth = #{hpGrowth},</if>
+            <if test="hpStart != null">hp_start = #{hpStart},</if>
+            <if test="mpMax != null">mp_max = #{mpMax},</if>
+            <if test="mpGrowth != null">mp_growth = #{mpGrowth},</if>
+            <if test="mpStart != null">mp_start = #{mpStart},</if>
+            <if test="attackMax != null">attack_max = #{attackMax},</if>
+            <if test="attackGrowth != null">attack_growth = #{attackGrowth},</if>
+            <if test="attackStart != null">attack_start = #{attackStart},</if>
+            <if test="defenseMax != null">defense_max = #{defenseMax},</if>
+            <if test="defenseGrowth != null">defense_growth = #{defenseGrowth},</if>
+            <if test="defenseStart != null">defense_start = #{defenseStart},</if>
+            <if test="hp5sMax != null">hp_5s_max = #{hp5sMax},</if>
+            <if test="hp5sGrowth != null">hp_5s_growth = #{hp5sGrowth},</if>
+            <if test="hp5sStart != null">hp_5s_start = #{hp5sStart},</if>
+            <if test="mp5sMax != null">mp_5s_max = #{mp5sMax},</if>
+            <if test="mp5sGrowth != null">mp_5s_growth = #{mp5sGrowth},</if>
+            <if test="mp5sStart != null">mp_5s_start = #{mp5sStart},</if>
+            <if test="attackSpeedMax != null">attack_speed_max = #{attackSpeedMax},</if>
+            <if test="attackRange != null and attackRange != ''">attack_range = #{attackRange},</if>
+            <if test="roleMain != null and roleMain != ''">role_main = #{roleMain},</if>
+            <if test="roleAssist != null and roleAssist != ''">role_assist = #{roleAssist},</if>
+            <if test="birthdate != null">birthdate = #{birthdate},</if>
+        </trim>
+        <include refid="page_where" />
+    </update>
+
+
+    <select id="selectAll" resultMap="herosResultMap">
+        select <include refid="table_columns" />
+        from heros
+    </select>
+
+    <select id="select" resultMap="herosResultMap">
+        select <include refid="table_columns" />
+        from heros
+        <include refid="page_where" />
+	</select>
+
+    <select id="getCount" resultType="int" >
+        select count(id) from heros
+        <include refid="page_where" />
+    </select>
+
+
+    <select id="getByPrimaryKey" resultMap="herosResultMap" parameterType="Integer" >
+		select <include refid="table_columns" />
+		from heros
+		where id = #{id}
+	</select>
+	
+	<!-- 其他自定义SQL -->
+
+
+</mapper>
